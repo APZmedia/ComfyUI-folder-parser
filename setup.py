@@ -32,26 +32,23 @@ try:
 
     # Proceed with setup
     setup(
-        name='ComfyUI-APZmedia-textTools',
+        name='ComfyUI-folder-parser',
         version='0.1.0',
-        description='Nodes for applying rich text overlays on images and videos.',
+        description='A ComfyUI custom node for parsing and filtering files from folders.',
         long_description=long_description,
         long_description_content_type='text/markdown',
         author='Pablo Apiolazza',
         author_email='pablo@apzmedia.com',
-        url='https://github.com/APZmedia/comfyui-textools',
+        url='https://github.com/APZmedia/comfyui-folder-parser',
         packages=find_packages(),
         install_requires=[
-            'Pillow>=8.0.0',
-            'torch>=1.7.0',
+            # No external dependencies required - uses only Python standard library
         ],
         python_requires='>=3.7',
 
         entry_points={
             'comfyui.custom_nodes': [
-                'APZmediaImageRichTextOverlay = nodes.apzImageRichTextOverlay:APZmediaImageRichTextOverlay',
-                'APZmediaImageRichTextOverlayV2 = nodes.apzImageRichTextOverlayV2:APZmediaImageRichTextOverlayV2',
-                'APZmediaImageMarkdownTextOverlay = nodes.apzImageMarkdownTextOverlay:APZmediaImageMarkdownTextOverlay',
+                'APZFolderParser = nodes.apzFolderParser:APZFolderParser',
             ]
         }
     )
