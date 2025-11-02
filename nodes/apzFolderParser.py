@@ -4,16 +4,25 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+print("[APZFolderParser] Module loaded")
+
 
 class APZFolderParser:
-    def __init__(self):
-        print("APZFolderParser initialized")
-    
     _sort_modes = ["none", "date_modified", "date_created", "alphabetical"]
+    
+    RETURN_TYPES = ("STRING", "INT", "STRING")
+    RETURN_NAMES = ("file_path", "total_files", "file_list")
+    FUNCTION = "parse_folder"
+    CATEGORY = "file/input"
+    
+    def __init__(self):
+        print("[APZFolderParser] Instance initialized")
+        logger.info("APZFolderParser instance created")
     
     @classmethod
     def INPUT_TYPES(cls):
-        return {
+        print("[APZFolderParser] INPUT_TYPES() called")
+        input_def = {
             "required": {
                 "folder_path": ("STRING", {"default": "", "multiline": False}),
                 "file_index": ("INT", {"default": 0, "min": 0}),
@@ -25,11 +34,8 @@ class APZFolderParser:
                 "reverse_sort": ("BOOLEAN", {"default": False}),
             }
         }
-    
-    RETURN_TYPES = ("STRING", "INT", "STRING")
-    RETURN_NAMES = ("file_path", "total_files", "file_list")
-    FUNCTION = "parse_folder"
-    CATEGORY = "file/input"
+        print(f"[APZFolderParser] INPUT_TYPES defined with {len(input_def['required'])} required inputs")
+        return input_def
     
     def parse_folder(self, folder_path, file_index, enable_extension_filter, file_extensions, 
                      enable_regex_filter, regex_pattern, sort_mode, reverse_sort):
@@ -54,7 +60,8 @@ class APZFolderParser:
             if not os.path.isdir(folder_path):
                 raise ValueError(f"Path is not a directory: {folder_path}")
             
-            # Get absolute path
+            # Get absolute path (for internal processing, but keep original for logging)
+            original_path = folder_path
             folder_path = os.path.abspath(folder_path)
             
             # Discover files (non-recursive, only in specified folder)
@@ -110,10 +117,13 @@ class APZFolderParser:
             # Get file at index
             selected_file = all_files[file_index]
             
-            # Create file list string for debugging
-            file_list_str = ",".join(all_files)
+            # Create file list string for debugging (limit length for readability)
+            file_list_str = ",".join(all_files[:10])  # First 10 files
+            if len(all_files) > 10:
+                file_list_str += f",... (+{len(all_files) - 10} more)"
             
-            logger.info(f"FolderParser: Found {total_files} files, returning index {file_index}: {selected_file}")
+            logger.info(f"FolderParser: Found {total_files} files, returning index {file_index}: {os.path.basename(selected_file)}")
+            print(f"[APZFolderParser] Successfully parsed folder: {total_files} files found, selected index {file_index}")
             
             return selected_file, total_files, file_list_str
             
@@ -180,3 +190,11 @@ class APZFolderParser:
         
         return sorted_files
 
+
+# Print class attributes after class definition
+print(f"[APZFolderParser] Class defined with attributes:")
+print(f"  RETURN_TYPES: {APZFolderParser.RETURN_TYPES}")
+print(f"  RETURN_NAMES: {APZFolderParser.RETURN_NAMES}")
+print(f"  FUNCTION: {APZFolderParser.FUNCTION}")
+print(f"  CATEGORY: {APZFolderParser.CATEGORY}")
+print(f"  _sort_modes: {APZFolderParser._sort_modes}")
