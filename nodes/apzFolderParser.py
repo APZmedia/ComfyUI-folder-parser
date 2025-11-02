@@ -1,10 +1,14 @@
 import os
 import re
+import sys
 import logging
 
 logger = logging.getLogger(__name__)
 
-print("[APZFolderParser] Module loaded")
+# Force stdout to be unbuffered
+sys.stdout.flush()
+
+print("[APZFolderParser] Module loaded", flush=True)
 
 
 class APZFolderParser:
@@ -192,9 +196,16 @@ class APZFolderParser:
 
 
 # Print class attributes after class definition
-print(f"[APZFolderParser] Class defined with attributes:")
-print(f"  RETURN_TYPES: {APZFolderParser.RETURN_TYPES}")
-print(f"  RETURN_NAMES: {APZFolderParser.RETURN_NAMES}")
-print(f"  FUNCTION: {APZFolderParser.FUNCTION}")
-print(f"  CATEGORY: {APZFolderParser.CATEGORY}")
-print(f"  _sort_modes: {APZFolderParser._sort_modes}")
+print(f"[APZFolderParser] Class defined with attributes:", flush=True)
+print(f"  RETURN_TYPES: {APZFolderParser.RETURN_TYPES}", flush=True)
+print(f"  RETURN_NAMES: {APZFolderParser.RETURN_NAMES}", flush=True)
+print(f"  FUNCTION: {APZFolderParser.FUNCTION}", flush=True)
+print(f"  CATEGORY: {APZFolderParser.CATEGORY}", flush=True)
+print(f"  _sort_modes: {APZFolderParser._sort_modes}", flush=True)
+print(f"[APZFolderParser] Has INPUT_TYPES: {hasattr(APZFolderParser, 'INPUT_TYPES')}", flush=True)
+if hasattr(APZFolderParser, 'INPUT_TYPES'):
+    try:
+        input_types = APZFolderParser.INPUT_TYPES()
+        print(f"[APZFolderParser] INPUT_TYPES() returns: {list(input_types.get('required', {}).keys())}", flush=True)
+    except Exception as e:
+        print(f"[APZFolderParser] ERROR calling INPUT_TYPES(): {e}", flush=True)
